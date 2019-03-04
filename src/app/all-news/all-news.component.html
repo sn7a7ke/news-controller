@@ -1,0 +1,30 @@
+<h2>All News</h2>
+<!-- <div *ngIf="allNews"> -->
+<div>
+  <table class="table table-striped">
+    <tr>
+      <th>Id</th>
+      <th>Title</th>
+      <!-- <th>Body</th> -->
+      <th>Create time</th>
+      <th></th>
+    </tr>
+    <tr *ngFor="let news of allNews">      
+      <td>{{news.id}}</td>
+      <td>{{news.title | uppercase}}</td>
+      <!-- <td>{{news.body | lowercase}}</td> -->
+      <td>{{news.createTime}}</td>
+      <td>
+        <a routerLink="/details/{{news.id}}">Details</a> | 
+        <a routerLink="/edit/{{news.id}}">Edit</a> | 
+        <a routerLink="/delete/{{news.id}}">Delete</a>
+      </td>
+    </tr>
+  </table>
+  <ngb-pagination class="d-flex justify-content-center" 
+    [collectionSize]="collectionSize" pageSize="5" [(page)]="page" 
+    [boundaryLinks]="true" (pageChange)="onPageChanged($event)">
+  </ngb-pagination>
+  <button class="btn btn-outline-secondary" (click)="add()">add news</button>
+</div>
+<!-- </div> -->

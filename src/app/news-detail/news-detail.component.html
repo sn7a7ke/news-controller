@@ -1,0 +1,9 @@
+<h2>News-detail</h2>
+<div *ngIf="oneNews">
+  <p>Id: {{oneNews.id}}</p>
+  <p>Title: {{oneNews.title}}</p> 
+  <p>Body: {{oneNews.body}}</p> 
+  <p>Create time: {{oneNews.createTime}}</p>
+</div>
+<button class="btn btn-outline-secondary" (click)="onGoBack()">go back</button>
+ 
