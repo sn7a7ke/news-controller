@@ -5,57 +5,53 @@ import { Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 import { NewsModelCharp } from './news-model-charp';
 
-const httpOptions = {
-  headers: new HttpHeaders({ 'Content-Type': 'application/json' })
-};
+// let httpOptions: {[header: string]: string};
+const myHeaders = new HttpHeaders(
+  { 'Content-Type': 'application/json',
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': 'DELETE, POST, GET, OPTIONS',
+    'Access-Control-Allow-Credentials': 'true'
+  });
+// let httpOptions = {
+//   headers: myHeaders
+
+//     // ,
+//     //   'Access-Control-Allow-Methods': 'DELETE, POST, GET, OPTIONS',
+//     //   'Access-Control-Allow-Credentials': 'true'
+// };
+// ,{ 'Access-Control-Allow-Methods', 'DELETE, POST, GET, OPTIONS' }
 
 @Injectable({
   providedIn: 'root'
 })
 export class NewsService {
 
-  constructor(private httpClient: HttpClient) { }
+  headers: HttpHeaders;
+  constructor(private httpClient: HttpClient) {
+    // this.headers = new HttpHeaders(
+    //   { 'Content-Type': 'application/json' });
+    // this.headers.set('Access-Control-Allow-Methods', 'GET');
+    // httpOptions = {headers: this.headers};
 
-  private newsUrl = 'http://localhost:60797/api/Values'; // 'api/news'; // /?type=json
+  }
 
-
-  // getNews(): Observable<NewsModel[]> {
-  //   return this.httpClient.get<NewsModelCharp[]>(this.newsUrl)
-  //     .map(data=>{
-  //     return data.map(function(user: NewsModelCharp) {
-  //         return {id: user.Id, title: user.Title, body: user.Body, createTime: user.CreateTime};
-  //       });
-
-  //   nmch.lift()
-  //   return nmch.forEach(n=>new NewsModel() = {n.Id})
-
-  // }
-
-  // convertAllModel(nm: Observable<NewsModelCharp[]>): Observable<NewsModel[]> {
-  //   return nm.
-  //   // return new Observable<NewsModel[]>();
-  // }
-
-  // convertOneModel(item: NewsModelCharp): NewsModel {
-  //   const result: NewsModel = { id: item.Id, title: item.Title, body: item.Body, createTime: item.CreateTime};
-  //   return result;
-  // }
-
+  private newsUrl = 'https://localhost:44377/api/values'; // 'api/news'; // /?type=json //60797
 
   getNews(): Observable<NewsModel[]> {
     // return this.httpClient.get(this.newsUrl) as Observable<NewsModel[]>;
-    return this.httpClient.get<NewsModel[]>(this.newsUrl);
+    return this.httpClient.get<NewsModel[]>(this.newsUrl, {headers: myHeaders});
   }
 
   getOneNews(id: number): Observable<NewsModel> {
     // return this.httpClient.get(this.newsUrl) as Observable<NewsModel[]>;+
-    const params = new HttpParams().set('id', id.toString());
-    return this.httpClient.get<NewsModel>(this.newsUrl, {params});
+    const url = `${this.newsUrl}/${id}`;
+    // const params = new HttpParams().set('id', id.toString());
+    return this.httpClient.get<NewsModel>(url, {headers: myHeaders}); // , params
   }
 
   updateNews(one: NewsModel): Observable<NewsModel> { //
     const url = `${this.newsUrl}/${one.id}`;
-    return this.httpClient.put<NewsModel>(url, one, httpOptions); // NewsModelCharp
+    return this.httpClient.put<NewsModel>(url, one, {headers: myHeaders}); // NewsModelCharp
     // JSON.stringify(one)  {Id: one.id, Title: one.title, Body: one.body, CreateTime: one.createTime}
 
 
